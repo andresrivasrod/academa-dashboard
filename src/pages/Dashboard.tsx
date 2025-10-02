@@ -6,7 +6,6 @@ import MetricsOverview from "@/components/dashboard/MetricsOverview";
 import UsageChart from "@/components/dashboard/UsageChart";
 import ClassRankings from "@/components/dashboard/TotalViews";
 import TeacherRankings from "@/components/dashboard/TeacherRankings";
-import UserDemographics from "@/components/dashboard/UserDemographics";
 import TopRatedClasses from "@/components/dashboard/TopRatedClasses";
 
 

@@ -9,13 +9,14 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-import { createSubject, listSubjects, deleteSubject, Subject } from "@/services/subjects";
+import { createSubject, listSubjects, deleteSubject, updateSubject, Subject } from "@/services/subjects";
 import { listUsers, User } from "@/services/users";
 
 const Classes = () => {
   const [loading, setLoading] = useState(false);
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [teachers, setTeachers] = useState<User[]>([]);
+  const [editing, setEditing] = useState<string | null>(null); // id de la clase que se está editando
   const [form, setForm] = useState<{ subject: string; category: string; description: string; professorId: string }>({
     subject: "",
     category: "",
@@ -27,12 +28,10 @@ const Classes = () => {
     setLoading(true);
     try {
       const subs = await listSubjects();
-      console.log("📥 [Classes] Clases cargadas en frontend:", subs);
       setSubjects(subs || []);
 
       const t = await listUsers({ role: "teacher" });
       const teachersList = "users" in t ? (t as any).users : (t as any);
-      console.log("👨‍🏫 [Classes] Profesores cargados:", teachersList);
       setTeachers(teachersList);
     } catch (e: any) {
       toast.error(e?.message || "Failed to load data");
@@ -51,13 +50,11 @@ const Classes = () => {
       return;
     }
     try {
-      console.log("⚡ [Classes] Creando clase con:", form);
       const created = await createSubject(form);
       toast.success("Class created");
       setSubjects((s) => [created, ...s]);
       setForm({ subject: "", category: "", description: "", professorId: "" });
     } catch (e: any) {
-      console.error("❌ [Classes] Error creando clase (capturado en handleCreate):", e);
       toast.error(e?.message || "Error creating class");
     }
   };
@@ -71,6 +68,19 @@ const Classes = () => {
       toast.success("Class deleted");
     } catch (e: any) {
       toast.error(e?.message || "Error deleting class");
+    }
+  };
+
+  const handleUpdateProfessor = async (subjectId: string, newProfessorId: string) => {
+    try {
+      const updated = await updateSubject(subjectId, { professorId: newProfessorId });
+      setSubjects((prev) =>
+        prev.map((s) => (s._id === subjectId || s.id === subjectId ? updated : s))
+      );
+      toast.success("Professor updated");
+      setEditing(null);
+    } catch (e: any) {
+      toast.error(e?.message || "Error updating professor");
     }
   };
 
@@ -123,7 +133,39 @@ const Classes = () => {
                     <div className="font-semibold">{s.subject}</div>
                     <div className="text-sm text-gray-300">{s.category} • {s.numberOfClasses} sessions</div>
                     <div className="text-sm text-gray-400">{s.description}</div>
-                    <div className="flex justify-end">
+
+                    {/* Profesor */}
+                    {editing === (s._id || s.id) ? (
+                      <div className="flex items-center space-x-2">
+                        <Select
+                          defaultValue={s.professor?._id || s.professor?.id || ""}
+                          onValueChange={(v) => handleUpdateProfessor(s._id || s.id!, v)}
+                        >
+                          <SelectTrigger className="bg-gray-700 border-gray-600">
+                            <SelectValue placeholder="Select professor" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {teachers.map((t) => (
+                              <SelectItem key={t.id} value={t.id}>
+                                {t.name} {t.lastName}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <Button size="sm" onClick={() => setEditing(null)} className="bg-gray-600">
+                          Cancel
+                        </Button>
+                      </div>
+                    ) : (
+                      <div className="text-sm text-gray-300">
+                        Professor: {s.professor?.name} {s.professor?.lastName || ""}
+                      </div>
+                    )}
+
+                    <div className="flex justify-between pt-2">
+                      <Button onClick={() => setEditing(s._id || s.id!)} size="sm" className="bg-blue-600 hover:bg-blue-700">
+                        Edit Professor
+                      </Button>
                       <Button onClick={() => handleDelete(s.id || s._id)} variant="destructive" size="sm">
                         Delete
                       </Button>

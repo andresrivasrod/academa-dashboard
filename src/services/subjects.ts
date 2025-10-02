@@ -80,3 +80,12 @@ export async function deleteSubject(id: string) {
   console.log("🗑️ [deleteSubject] Eliminando subject con id:", id);
   return api.del<{ status: string }>(`/subjects/${id}`);
 }
+
+// ✅ PUT /subjects/:id
+export async function updateSubject(id: string, payload: Partial<Subject>) {
+  const res = await api.put<{ status: string; data: { subject: Subject } }>(
+    `/subjects/${id}`,
+    payload
+  );
+  return res.data.subject;
+}

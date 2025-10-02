@@ -3,19 +3,18 @@
 import express from "express";
 import cors from "cors";
 import { createProxyMiddleware } from "http-proxy-middleware";
-import fetch from "node-fetch"; // si usas Node 18+, puedes quitar esto y usar global fetch
+import fetch from "node-fetch"; 
 
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-// ====== CORS global (para que el frontend hable solo con :4000) ======
 app.use(cors());
 
 // ====== PROXY al BACKEND (montado ANTES de cualquier body parser) ======
 app.use(
   "/api/v1",
   createProxyMiddleware({
-    target: "http://34.10.68.32:3000", // tu backend real
+    target: "http://34.10.68.32:3000", 
     changeOrigin: true,
     xfwd: true,
     logLevel: "debug",
@@ -27,7 +26,6 @@ app.use(
   })
 );
 
-// (Opcional) logging simple para ver qué entra al proxy
 app.use((req, _res, next) => {
   console.log(`[Mux/Local] ${req.method} ${req.url}`);
   next();
@@ -64,9 +62,6 @@ async function muxGet(path, params = {}) {
   return res.json();
 }
 
-// No ponemos app.use(express.json()) antes del proxy al backend.
-// Para estos endpoints GET de Mux no lo necesitamos. Si en el futuro
-// agregas POST locales, pon express.json() DESPUÉS del proxy del backend.
 
 app.get("/metrics/views", async (req, res) => {
   const period = req.query.period || "30d";

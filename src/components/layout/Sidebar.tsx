@@ -36,10 +36,6 @@ const Sidebar = () => {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild className={isActive("/") ? "bg-gray-700 text-white" : "hover:bg-gray-700"}>
-              <Link to="/" className="flex items-center">
-                <Home className="mr-2 h-5 w-5" />
-                <span>Home</span>
-              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
@@ -70,14 +66,6 @@ const Sidebar = () => {
       </SidebarContent>
       <SidebarFooter className="pt-2">
         <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton asChild className="hover:bg-gray-700">
-              <Link to="#" className="flex items-center">
-                <Settings className="mr-2 h-5 w-5" />
-                <span>Settings</span>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>
     </SidebarComponent>
