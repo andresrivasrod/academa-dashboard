@@ -1,4 +1,3 @@
-// src/services/ratings.ts
 import { api } from "@/lib/api";
 
 export interface Rating {
@@ -14,26 +13,41 @@ export interface Rating {
   };
 }
 
+// 🔹 Obtener ratings de un subject específico
+export async function getSubjectRatings(subjectId: string): Promise<Rating[]> {
+  try {
+    const res = await api.get<{ status: string; data: { ratings: Rating[] } }>(
+      `/subjects/${subjectId}/ratings`
+    );
+
+    return Array.isArray(res.data?.ratings) ? res.data.ratings : [];
+  } catch (err) {
+    console.error(`Error en getSubjectRatings(${subjectId}):`, err);
+    return [];
+  }
+}
+
+// 🔹 Obtener todos los ratings de TODAS las clases de un profesor
 export async function getRatingsByProfessor(professorId: string): Promise<Rating[]> {
   try {
-    // 1. Obtener las clases del profesor
+    // 1. Obtener subjects del profesor
     const subsRes = await api.get<{ status: string; data: { subjects: any[] } }>(
       `/subjects`,
       { professor: professorId }
     );
-
     const subjects = subsRes.data?.subjects || [];
 
-    // 2. Para cada clase, obtener ratings
+    // 2. Para cada subject, obtener ratings
     const allRatings: Rating[] = [];
     for (const s of subjects) {
       try {
-        const res = await api.get<{ status: string; data: { ratings: Rating[] } }>(
-          `/subjects/${s._id}/ratings`
+        const ratings = await getSubjectRatings(s._id || s.id);
+        allRatings.push(
+          ...ratings.map((r) => ({
+            ...r,
+            subject: s.subject, // 🔑 agregamos nombre de la clase al rating
+          }))
         );
-        if (Array.isArray(res.data?.ratings)) {
-          allRatings.push(...res.data.ratings);
-        }
       } catch (err) {
         console.error(`Error obteniendo ratings de la clase ${s._id}`, err);
       }

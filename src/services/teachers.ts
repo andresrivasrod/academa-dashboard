@@ -1,3 +1,4 @@
+// src/services/teachers.ts
 import { getAuthToken } from "@/contexts/AuthContext";
 
 export interface TeacherRating {
@@ -6,12 +7,20 @@ export interface TeacherRating {
   averageRating: number;
 }
 
-// 🔹 obtiene TODOS los profesores con su rating (0 si no tienen)
+export interface Teacher {
+  id: string;
+  name: string;
+  lastName: string;
+  email?: string;
+  role: string;
+}
+
+// 🔹 Obtener TODOS los profesores con su rating promedio
 export async function getAllTeachersWithRatings(): Promise<TeacherRating[]> {
   const token = getAuthToken();
   if (!token) return [];
 
-  // 1. Usuarios (todos los teachers)
+  // 1. Usuarios (profesores)
   const usersRes = await fetch("http://localhost:4000/api/v1/users?limit=1000", {
     headers: { Authorization: `Bearer ${token}` },
   });
@@ -35,7 +44,7 @@ export async function getAllTeachersWithRatings(): Promise<TeacherRating[]> {
   // 3. Agrupar ratings por profesor
   const ratingBuckets = new Map<string, number[]>();
   subjects.forEach((s: any) => {
-    const teacherId = s.professor?._id;
+    const teacherId = s.professor?._id || s.professor?.id;
     const rating = s.averageRating || 0;
     if (!teacherId) return;
     if (!ratingBuckets.has(teacherId)) ratingBuckets.set(teacherId, []);
@@ -54,8 +63,31 @@ export async function getAllTeachersWithRatings(): Promise<TeacherRating[]> {
   });
 }
 
-// 🔹 obtiene SOLO el top 5
+// 🔹 Obtener SOLO el top 5
 export async function getTopTeachersByRating(): Promise<TeacherRating[]> {
   const all = await getAllTeachersWithRatings();
   return all.sort((a, b) => b.averageRating - a.averageRating).slice(0, 5);
+}
+
+// 🔹 Obtener info de un profesor por ID
+export async function getTeacherById(id: string): Promise<Teacher> {
+  const token = getAuthToken();
+  if (!token) throw new Error("No token found");
+
+  const res = await fetch(`http://localhost:4000/api/v1/users/${id}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+  if (!res.ok) throw new Error("Error obteniendo profesor");
+  const data = await res.json();
+
+  // ✅ ahora devolvemos el user correctamente
+  const user = data?.data?.user || data?.data || {};
+  return {
+    id: user._id || user.id,
+    name: user.name || "",
+    lastName: user.lastName || "",
+    email: user.email,
+    role: user.role,
+  };
 }
