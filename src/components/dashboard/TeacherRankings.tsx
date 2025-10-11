@@ -1,13 +1,12 @@
+// src/components/TeacherRankings.tsx
 import { useEffect, useState } from "react";
 import { getTopTeachersByRating, TeacherRating } from "@/services/teachers";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 
 const TeacherRankings: React.FC<{ period: string }> = ({ period }) => {
   const [teachers, setTeachers] = useState<TeacherRating[]>([]);
-  const [viewMode, setViewMode] = useState<"chart" | "list">("chart");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -20,52 +19,26 @@ const TeacherRankings: React.FC<{ period: string }> = ({ period }) => {
   };
 
   return (
-    <Card className="bg-[#1E2435] text-white">
-      <CardHeader>
-        <CardTitle className="flex justify-between items-center">
-          Top 5 Teachers by Rating
-          <div className="space-x-2">
-            <Button
-              variant={viewMode === "chart" ? "default" : "outline"}
-              onClick={() => setViewMode("chart")}
-            >
-              Chart
-            </Button>
-            <Button
-              variant={viewMode === "list" ? "default" : "outline"}
-              onClick={() => setViewMode("list")}
-            >
-              List
-            </Button>
-            <Button
-              variant="secondary"
-              onClick={() => navigate("/teachers")}
-            >
-              View All
-            </Button>
-          </div>
-        </CardTitle>
+    <Card className="bg-gray-800 border-gray-700">
+      <CardHeader className="flex flex-row justify-between items-center">
+        <CardTitle>Mejores Profesores Calificados</CardTitle>
+        <Button size="sm" onClick={() => navigate("/teachers")}>
+          Ver Todos
+        </Button>
       </CardHeader>
-      <CardContent>
-        {viewMode === "chart" ? (
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={teachers}>
-              <XAxis dataKey="teacher" stroke="#ccc" />
-              <YAxis />
-              <Tooltip />
-              <Bar dataKey="averageRating" fill="#4ade80" />
-            </BarChart>
-          </ResponsiveContainer>
-        ) : (
-          <ul className="space-y-2">
-            {teachers.map((t) => (
-              <li key={t.id} className="flex justify-between">
-                <span>{t.teacher}</span>
-                <span>{t.averageRating.toFixed(2)} ⭐</span>
-              </li>
-            ))}
-          </ul>
-        )}
+      <CardContent className="space-y-3">
+        {teachers.map((t, i) => (
+          <div
+            key={t.id}
+            className="flex items-center justify-between p-2 rounded bg-gray-900 border border-gray-700"
+          >
+            <span className="text-white font-medium">
+              {i + 1}. {t.teacher}
+            </span>
+            <span className="text-yellow-400">⭐ {t.averageRating.toFixed(1)}</span>
+          </div>
+        ))}
+        {teachers.length === 0 && <div className="text-gray-400">No se encontraron profesores.</div>}
       </CardContent>
     </Card>
   );

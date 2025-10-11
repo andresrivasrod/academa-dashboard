@@ -28,7 +28,7 @@ const Sidebar = () => {
       <SidebarHeader className="flex items-center justify-between pb-4">
         <div className="flex items-center justify-between w-full">
           <div className="flex items-center">
-            <span className="text-xl font-bold text-white">Admin Panel</span>
+            <span className="text-xl font-bold text-white">Panel de Control</span>
           </div>
         </div>
       </SidebarHeader>
@@ -50,7 +50,7 @@ const Sidebar = () => {
             <SidebarMenuButton asChild className={isActive("/admin/users") ? "bg-gray-700 text-white" : "hover:bg-gray-700"}>
               <Link to="/admin/users" className="flex items-center">
                 <Users className="mr-2 h-5 w-5" />
-                <span>Users</span>
+                <span>Usuarios</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -58,7 +58,7 @@ const Sidebar = () => {
             <SidebarMenuButton asChild className={isActive("/admin/classes") ? "bg-gray-700 text-white" : "hover:bg-gray-700"}>
               <Link to="/admin/classes" className="flex items-center">
                 <Calendar className="mr-2 h-5 w-5" />
-                <span>Classes</span>
+                <span>Clases</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>

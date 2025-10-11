@@ -15,9 +15,9 @@ const TopRatedClasses = () => {
   return (
     <Card className="bg-gray-800 border-gray-700">
       <CardHeader className="flex flex-row justify-between items-center">
-        <CardTitle>🏆 Top Rated Classes</CardTitle>
+        <CardTitle>Mejores Clases Calfificadas</CardTitle>
         <Button size="sm" onClick={() => navigate("/all-classes")}>
-          View All
+          Ver Todas
         </Button>
       </CardHeader>
       <CardContent className="space-y-3">

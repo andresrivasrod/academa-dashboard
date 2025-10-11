@@ -10,7 +10,6 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { useAuth } from "@/contexts/AuthContext";
 
 const Login = () => {
-  // Demo admin to start: admin@academa.local / Password123!
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -42,15 +41,14 @@ const Login = () => {
     <div className="min-h-screen flex items-center justify-center bg-[#1A1F2C] p-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-white">Platform Analytics</h1>
-          <p className="text-gray-400 mt-2">Admin Dashboard</p>
+          <h1 className="text-3xl font-bold text-white">Panel de Control</h1>
         </div>
         
         <Card className="border-gray-700 bg-gray-800 text-white">
           <CardHeader>
-            <CardTitle className="text-2xl text-center">Admin Login</CardTitle>
+            <CardTitle className="text-2xl text-center">Iniciar Sesión</CardTitle>
             <CardDescription className="text-gray-400 text-center">
-              Enter your credentials to access the dashboard
+              Ingrese sus credenciales para continuar
             </CardDescription>
           </CardHeader>
           <form onSubmit={handleLogin}>
@@ -68,7 +66,7 @@ const Login = () => {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="password" className="text-gray-300">Password</Label>
+                <Label htmlFor="password" className="text-gray-300">Contraseña</Label>
                 <div className="relative">
                   <Input
                     id="password"
@@ -101,7 +99,7 @@ const Login = () => {
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
-                    Logging in...
+                    Iniciando Sesión..
                   </span>
                 ) : (
                   <span className="flex items-center justify-center">

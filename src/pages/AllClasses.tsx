@@ -24,7 +24,7 @@ const AllClasses = () => {
         <Header />
         <div className="p-6 space-y-6">
           <Card className="bg-gray-800 border-gray-700">
-            <CardHeader><CardTitle>All Classes</CardTitle></CardHeader>
+            <CardHeader><CardTitle>Todas las Clases</CardTitle></CardHeader>
             <CardContent className="space-y-3">
               {classes.map((c, i) => (
                 <div key={c.id || c._id} className="p-3 rounded bg-gray-900 border border-gray-700 flex justify-between">
@@ -40,7 +40,7 @@ const AllClasses = () => {
                   </div>
                 </div>
               ))}
-              {classes.length === 0 && <div className="text-gray-400">No classes found.</div>}
+              {classes.length === 0 && <div className="text-gray-400">No hay clases registradas.</div>}
             </CardContent>
           </Card>
         </div>

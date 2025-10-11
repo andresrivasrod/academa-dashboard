@@ -5,8 +5,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
-
-import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
 import Users from "./pages/Users";
 import Classes from "./pages/Classes";
@@ -15,6 +13,7 @@ import NotFound from "./pages/NotFound";
 import AllTeachers from "@/pages/AllTeachers"; 
 import AllClasses from "@/pages/AllClasses"; 
 import TeacherRatings from "@/pages/TeacherRatings";
+import { Navigate } from "react-router-dom";
 
 
 const queryClient = new QueryClient();
@@ -28,7 +27,7 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             {/* Public routes */}
-            <Route path="/" element={<Index />} />
+            <Route path="/" element={<Navigate to="/login" replace />} />
             <Route path="/login" element={<Login />} />
 
             {/* Protected routes */}

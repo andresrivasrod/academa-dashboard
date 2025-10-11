@@ -26,42 +26,41 @@ const AllTeachers: React.FC = () => {
   };
 
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-[#1A1F2C]">
-        <Sidebar />
-        <SidebarInset>
-          <Header />
-          <main className="flex-1 overflow-y-auto p-4 md:p-6">
-            <Card className="bg-[#1E2435] text-white">
-              <CardHeader>
-                <CardTitle>Todos los Profesores y su Rating</CardTitle>
-              </CardHeader>
-              <CardContent>
-                {teachers.length === 0 ? (
-                  <p className="text-gray-400">No hay profesores registrados.</p>
-                ) : (
-                  <ul className="space-y-3">
-                    {teachers.map((t) => (
-                      <li
-                        key={t.id}
-                        className="flex justify-between border-b border-gray-700 pb-2"
-                      >
-                        <Link
-                          to={`/teachers/${t.id}/ratings`}
-                          className="text-blue-400 hover:underline"
-                        >
-                          {t.teacher}
-                        </Link>
-                        <span>{t.averageRating.toFixed(2)} ⭐</span>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </CardContent>
-            </Card>
-          </main>
-        </SidebarInset>
-      </div>
+    <SidebarProvider defaultOpen>
+      <Sidebar />
+      <SidebarInset className="bg-gray-900 text-white min-h-screen">
+        <Header />
+        <div className="p-6 space-y-6">
+          <Card className="bg-gray-800 border-gray-700">
+            <CardHeader>
+              <CardTitle>Todos los Profesores</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {teachers.map((t, i) => (
+                <div
+                  key={t.id}
+                  className="p-3 rounded bg-gray-900 border border-gray-700 flex justify-between items-center"
+                >
+                  <div>
+                    <Link
+                      to={`/teachers/${t.id}/ratings`}
+                      className="font-semibold text-blue-400 hover:underline"
+                    >
+                      {i + 1}. {t.teacher}
+                    </Link>
+                  </div>
+                  <div className="text-yellow-400 font-bold text-lg">
+                    ⭐ {t.averageRating.toFixed(1)}
+                  </div>
+                </div>
+              ))}
+              {teachers.length === 0 && (
+                <div className="text-gray-400">No hay profesores registrados.</div>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+      </SidebarInset>
     </SidebarProvider>
   );
 };

@@ -64,53 +64,51 @@ const TeacherRatings: React.FC = () => {
   };
 
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-[#1A1F2C] text-white">
-        <Sidebar />
-        <SidebarInset>
-          <Header />
-          <main className="flex-1 overflow-y-auto p-4 md:p-6 space-y-6">
-            <Card className="bg-[#1E2435]">
-              <CardHeader>
-                <CardTitle>
-                  Comentarios del profesor {teacherName}
-                </CardTitle>
-                <p className="text-sm text-gray-400">
-                  Clases dictadas:{" "}
-                  {subjects.length > 0
-                    ? subjects.map((s) => s.subject).join(", ")
-                    : "Ninguna"}
-                </p>
-              </CardHeader>
-              <CardContent>
-                {ratings.length === 0 ? (
-                  <p className="text-gray-400">No hay comentarios aún.</p>
-                ) : (
-                  <ul className="space-y-4">
-                    {ratings.map((r) => (
-                      <li
-                        key={r._id}
-                        className="p-4 bg-gray-800 rounded-lg border border-gray-700"
-                      >
-                        <div className="flex justify-between text-sm text-gray-400 mb-1">
-                          <span>
-                            {new Date(r.createdAt).toLocaleDateString()} •{" "}
-                            {r.subjectName || "Clase desconocida"}
-                          </span>
-                          <span>{r.score} ⭐</span>
-                        </div>
-                        <p className="text-gray-200">
-                          {r.comment || "Sin comentario"}
-                        </p>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </CardContent>
-            </Card>
-          </main>
-        </SidebarInset>
-      </div>
+    <SidebarProvider defaultOpen>
+      <Sidebar />
+      <SidebarInset className="bg-gray-900 text-white min-h-screen">
+        <Header />
+        <div className="p-6 space-y-6">
+          <Card className="bg-gray-800 border-gray-700">
+            <CardHeader>
+              <CardTitle>Comentarios al profesor {teacherName}</CardTitle>
+              <p className="text-sm text-gray-400">
+                Clases dictadas:{" "}
+                {subjects.length > 0
+                  ? subjects.map((s) => s.subject).join(", ")
+                  : "Ninguna"}
+              </p>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {ratings.length === 0 ? (
+                <div className="text-gray-400">No hay comentarios aún.</div>
+              ) : (
+                ratings.map((r) => (
+                  <div
+                    key={r._id}
+                    className="p-3 rounded bg-gray-900 border border-gray-700 flex justify-between"
+                  >
+                    <div>
+                      <div className="font-semibold text-white">
+                        {r.subjectName || "Clase desconocida"}
+                      </div>
+                      <div className="text-sm text-gray-400">
+                        {new Date(r.createdAt).toLocaleDateString()}
+                      </div>
+                      <p className="text-gray-300 mt-1">
+                        {r.comment || "Sin comentario"}
+                      </p>
+                    </div>
+                    <div className="text-yellow-400 font-bold text-lg">
+                      ⭐ {r.score}
+                    </div>
+                  </div>
+                ))
+              )}
+            </CardContent>
+          </Card>
+        </div>
+      </SidebarInset>
     </SidebarProvider>
   );
 };

@@ -20,7 +20,7 @@ const TotalViews: React.FC<Props> = ({ period }) => {
   return (
     <div className="bg-gray-800 p-5 rounded-2xl shadow-md flex flex-col items-center justify-center">
       <Eye className="text-indigo-400 mb-2" size={32} />
-      <h3 className="text-sm font-medium text-gray-400">Total Views</h3>
+      <h3 className="text-sm font-medium text-gray-400">Total de Visualizaciones</h3>
       <p className="text-3xl font-bold text-indigo-400">{total}</p>
     </div>
   );
